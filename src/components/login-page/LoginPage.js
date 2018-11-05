@@ -1,41 +1,62 @@
 import React, {Component} from 'react';
-import '../../styles/loginpage.css'
-import firebase from 'firebase';
+import {CSSTransitionGroup} from 'react-transition-group'; // ES6
+import '../../styles/login-page/loginpage.css';     
+import { compose } from 'redux'
+import { connect } from 'react-redux'
+import { firebaseConnect} from 'react-redux-firebase'
+import {withRouter} from "react-router-dom";
+
 
 const widthWindow = window.innerWidth
 const heightWindow = window.innerHeight
-const auth = firebase.auth;
-var provider = new firebase.auth.GoogleAuthProvider();
-
 class LoginPage extends Component {
-
-    constructor(props) {
+    constructor(props){
         super(props);
-        this.state = {
-        }
-        this.LoginWithGoogle=this.LoginWithGoogle.bind(this);
+        this.goToPageHome=this.goToPageHome.bind(this);
     }
 
-    LoginWithGoogle = () =>{
-        // auth.signInWithPopup(provider);
+    goToPageHome(){
+        this.props.history.push('/home');
     }
-    
+
+    componentDidUpdate(){
+        const auth = this.props.auth;
+        if(auth.isLoaded && !auth.isEmpty){
+            this.goToPageHome();
+        }
+    }
+
     render() {
         return ( 
             <div className="container-loginpage" style={{"width": widthWindow, "height":heightWindow}}>
+                <CSSTransitionGroup 
+                transitionName="aminMoveDown"
+                transitionAppear={true}
+                transitionAppearTimeout={800}
+                transitionEnterTimeout={0}
+                transitionLeaveTimeout={300}>
                 <div className="main" >
-                    <div className="title-login">
-                        Login
-                    </div>
-                    <div className="btn-login">
-                        <button class="btn-login-google" onClick={this.LoginWithGoogle}>
+                    <CSSTransitionGroup 
+                        transitionName="aminAppear"
+                        transitionAppear={true}
+                        transitionAppearTimeout={800}
+                        transitionEnterTimeout={0}
+                        transitionLeaveTimeout={300}>
+                        <h1 className="title-login">Signin</h1>
+                    </CSSTransitionGroup>
+                    <div className="btn-login-wrapper">
+                        <button class="btn-login-google"onClick={() => this.props.firebase.login({ provider: 'google', type: 'popup' })}>
                             Sign in Google
                         </button>
                     </div>
                 </div>
+                </CSSTransitionGroup>
             </div>
         );
     }
 }
 
-export default LoginPage;
+export default compose(
+    firebaseConnect(), // withFirebase can also be used
+    connect(({firebase: { auth } }) => ({ auth }))
+)(withRouter(LoginPage))

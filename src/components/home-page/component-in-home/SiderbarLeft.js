@@ -1,24 +1,52 @@
 import React from 'react';
 import Channel from '../../home-page/component-in-home/Channel.js';
 import '../../../styles/homepage/component-in-home/SiderbarLeft.css';
-
-const channels = [];
+import { firebaseConnect, isLoaded, isEmpty } from 'react-redux-firebase';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import {manageUsersAction} from '../../../actions/manageUsersAction.js';
 
 class SiderbarLeft extends React.Component {
+    
     render() {
-        console.log("siderbar-left")
+        var channels = [];
+        const auth = this.props.auth;
+        if(auth.isLoaded && !auth.isEmpty){
+            channels = this.props.users;
+        }
+    
         return (
-            <div className="siderbar-left">
-                <div className="title-member">Messenger </div>
-                <div className="channels">
-                    {channels.map((channel, index) => {
-                        return (
-                            <Channel key={index} channel={channel}></Channel>
-                        );
-                    })}
+            ((isLoaded(this.props.users) && !isEmpty(this.props.users)) ?
+                <div className="siderbar-left">
+                    <div className="title-member">Messenger </div>
+                    <div className="channels">
+                        {
+                            channels.map((channel, index) => {
+                                if(channel.key !== auth.uid){
+                                    return (
+                                        <Channel key={index} channel={channel}></Channel>
+                                    );
+                                }
+                            })
+                        }
+                    </div>
                 </div>
-            </div>
+                :
+                <div>Loading...</div>
+            )
         )
     }
 }
-export default SiderbarLeft;
+
+const mapDispatchToProps = (dispatch) => ({
+    actionUpdateListUser: (payload) => dispatch(manageUsersAction.actionUpdateListUser(payload)),
+});
+
+
+
+export default compose(
+    firebaseConnect((props) => [
+        { path: '/users' } // string equivalent 'todos'
+    ]), // withFirebase can also be used
+    connect(({firebase: { auth, ordered, data}, manageUsersReducer }) => ({ auth, users: ordered.users, manageUsersReducer }), mapDispatchToProps)
+)(SiderbarLeft)

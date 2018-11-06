@@ -24,11 +24,11 @@
 }
 
 .channel:hover{
-    background: #b7e7d888;
+    background: #95e6ff54;
 }
 
 .channel:active{
-    background: #1ecc8177;
+    background: #18c4f854;
 }
 
 .channel-active{
@@ -37,7 +37,7 @@
     overflow: hidden;
     padding: 10px;
     height: 80px;
-    background: #1ecc8177;
+    background: #27d4ff77;
     box-shadow: 0px 2px 2px rgb(151, 150, 150);
 }
 
@@ -103,4 +103,36 @@
     color: black;
     text-align: center;
     border-bottom: 0.5px solid rgb(200, 200, 200);
+}
+
+.user-image{
+    position: relative;
+}
+
+.user-online{
+    width: 18px;
+    height: 18px;
+    display: block;
+    position: absolute;
+    border-style: solid;
+    border-width: 2px;
+    border-color: white;
+    background: rgb(25, 255, 17);
+    border-radius: 50%;
+    right: -3px;
+    bottom: 5px;
+}
+
+.user-offline{
+    width: 18px;
+    height: 18px;
+    display: block;
+    position: absolute;
+    border-style: solid;
+    border-width: 2px;
+    border-color: white;
+    background: rgb(121, 121, 121);
+    border-radius: 50%;
+    right: -3px;
+    bottom: 3px;
 }

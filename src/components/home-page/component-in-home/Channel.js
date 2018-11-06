@@ -1,35 +1,42 @@
 import React from 'react';
 import classNames from 'classnames';
-import lodash from 'lodash';
 import '../../../styles/homepage/component-in-home/SiderbarLeft.css';
-import iconcancel from '../../../resources/iconcancel.png';
+import { connect } from 'react-redux';
+import {channelAction} from '../../../actions/channelAction';
 
 class Channel extends React.Component{
     constructor(props){
         super(props);
-        this.cancelChannel = this.cancelChannel.bind(this);
+        this.setIdActiveChannel = this.setIdActiveChannel.bind(this);
     }
 
-    cancelChannel(){
-
+    setIdActiveChannel(channel){
+        let payload = {};
+        payload.activeChannel = channel;
+        this.props.actionsSetActiveChannel(payload);
     }
 
     render(){
         const {channel} = this.props;
-        const currenntMessage = "Curent message";
-        const nameUserChat = {};
-        const activeChannel = {};
+        const activeChannel = this.props.activeChannel;
+        const isOnline = channel.connection;
+        
         return(
             <div onClick={() => {
-                const idChannelActive = 1;
-            }} key={channel._id} className={classNames('channel', { 'channel-active': lodash.get(activeChannel, 'id') === channel.id })}>
+                this.setIdActiveChannel(channel)
+            }} key={channel.key} className={classNames('channel', { 'channel-active': activeChannel.key === channel.key })}>
                 <div className="user-image">
-                    <img src={channel.avatar} alt="avatar" />
+                    <img src={channel.value.avatarUrl} alt="avatar" />
+                    {
+                        isOnline ? <span className='user-online'></span> : <span className='user-offline'></span>
+                    }
                 </div>
                     
                 <div className="channel-info">
-                    <div>{channel.title}</div>
-                    <p>{channel.lastMessage}</p>
+                    <div>{channel.value.displayName}</div>
+                    {/* <p>{channel.lastMessage}</p> */}
+                    <p>last message</p>
+
                 </div>
 
                 <div className="number-messagewait">
@@ -39,17 +46,21 @@ class Channel extends React.Component{
                         null
                     } */}
                 </div>
-                <div>
-                    {channel.isNew ? 
-                    <div className='cancel'>
-                        <img src={iconcancel} alt="avatar" onClick={this.cancelChannel}/>
-                    </div>
-                    :
-                    null}
-                </div>
             </div>
         )
     }
 }
 
-export default Channel;
+const mapStateToProps = (state) => ({
+    activeChannel: state.channelReducer.activeChannel,
+})
+
+const mapDispatchToProps = (dispatch) => ({
+    actionsSetActiveChannel: (payload) => dispatch(channelAction.actionsSetActiveChannel(payload)),
+});
+
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Channel);

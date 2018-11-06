@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {CSSTransitionGroup} from 'react-transition-group'; // ES6
-import '../../styles/login-page/loginpage.css';     
+import '../../styles/login-page/LoginPage.css';     
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { firebaseConnect} from 'react-redux-firebase'
 import {withRouter} from "react-router-dom";
-
+import Firebase from 'firebase';
 
 const widthWindow = window.innerWidth
 const heightWindow = window.innerHeight
@@ -19,11 +19,56 @@ class LoginPage extends Component {
         this.props.history.push('/home');
     }
 
+    componentDidMount(){
+        const auth = this.props.auth;
+        if(auth.isLoaded && !auth.isEmpty){
+            this.props.firebase.auth().onAuthStateChanged(
+                (user) => {
+                    if (user) {
+                        console.log("login");
+                        const uid = user.uid;;
+                        var lastOnlineRef = this.props.firebase.database().ref('users/' + uid + '/lastOnline');
+                        var myConnectionsRef = this.props.firebase.database().ref('users/' + uid + '/connection');
+                        var connectedRef = this.props.firebase.database().ref('.info/connected');
+                        connectedRef.on('value', function (snap) {
+                            if (snap.val() === true) {
+                                myConnectionsRef.set(true);
+                                lastOnlineRef.onDisconnect().set(Firebase.database.ServerValue.TIMESTAMP);
+                                myConnectionsRef.onDisconnect().set(false);
+                            }
+                        });
+                    }
+                }
+            );
+            this.goToPageHome();
+        }
+    }
+
     componentDidUpdate(){
         const auth = this.props.auth;
         if(auth.isLoaded && !auth.isEmpty){
+            this.props.firebase.auth().onAuthStateChanged(
+                (user) => {
+                    if (user) {
+                        console.log("login");
+                        const uid = user.uid;;
+                        var lastOnlineRef = this.props.firebase.database().ref('users/' + uid + '/lastOnline');
+                        var myConnectionsRef = this.props.firebase.database().ref('users/' + uid + '/connection');
+                        var connectedRef = this.props.firebase.database().ref('.info/connected');
+                        connectedRef.on('value', function (snap) {
+                            if (snap.val() === true) {
+                                myConnectionsRef.set(true);
+                                lastOnlineRef.onDisconnect().set(Firebase.database.ServerValue.TIMESTAMP);
+                                myConnectionsRef.onDisconnect().set(false);
+                            }
+                        });
+                    }
+                    this.props.setIsSignin(!!user);
+                    console.log(this.props)
+                }
+            );
             this.goToPageHome();
-        }
+        } 
     }
 
     render() {
@@ -57,6 +102,8 @@ class LoginPage extends Component {
 }
 
 export default compose(
-    firebaseConnect(), // withFirebase can also be used
-    connect(({firebase: { auth } }) => ({ auth }))
-)(withRouter(LoginPage))
+    firebaseConnect((props) => [
+        { path: '/users' } // string equivalent 'todos'
+    ]), // withFirebase can also be used
+    connect(({firebase: { auth, ordered, data} }) => ({ auth, users: ordered.users }))
+)(LoginPage)

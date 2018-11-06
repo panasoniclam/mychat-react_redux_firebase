@@ -5,28 +5,28 @@ import '../../../styles/homepage/component-in-home/HeaderLeft.css';
 class HeaderLeft extends React.Component {
     constructor(props) {
         super(props);
-        // this.handleSearch = this.handleSearch.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
     }
 
-    // handleSearch() {
-    //     const { store } = this.props;
-    //     if (store.getNameUserSearch && store.getNameUserSearch.trim().length > 0) {
-    //         store.setShowComponentSearch(true);
-    //         store.searchNameUserChat().then((result) => {
-    //             store.setListUsersSearch(result);
-    //             store.setNameUserSearch('');                
-    //         }).catch((err) => {
-    //             if (err === 403) {
-    //                 this.onLogoutApp();
-    //             }
-    //             if (err === 404) {
-    //                 store.clearListUsersSearch();
-    //             }
-    //         })
-    //     } else {
-    //         store.setNameUserSearch('');
-    //     }
-    // }
+    handleSearch() {
+        // const { store } = this.props;
+        // if (store.getNameUserSearch && store.getNameUserSearch.trim().length > 0) {
+        //     store.setShowComponentSearch(true);
+        //     store.searchNameUserChat().then((result) => {
+        //         store.setListUsersSearch(result);
+        //         store.setNameUserSearch('');                
+        //     }).catch((err) => {
+        //         if (err === 403) {
+        //             this.onLogoutApp();
+        //         }
+        //         if (err === 404) {
+        //             store.clearListUsersSearch();
+        //         }
+        //     })
+        // } else {
+        //     store.setNameUserSearch('');
+        // }
+    }
 
     render() {
         console.log("header left");

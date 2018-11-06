@@ -10,7 +10,7 @@ import SiderbarLeft from '../../components/home-page/component-in-home/SiderbarL
 import MenuBar from '../../components/home-page/component-in-home/MenuBar.js';
 import MainContent from '../../components/home-page/component-in-home/MainContent.js';
 import MessageInput from '../../components/home-page/component-in-home/MessageInput.js';
-import '../../styles/homepage/home.css'
+import '../../styles/homepage/Home.css'
 
 class Home extends Component{
     constructor(props){
@@ -41,19 +41,9 @@ class Home extends Component{
         const style = {
             height:height,
         }
-
-
-
-        // console.log("1234");
-        // this.props.firebase.auth().signOut().then(function() {
-        //     // Sign-out successful.
-        //     console.log("logout success")
-        // }, function(error) {
-        //     // An error happened.
-        // });
-        // this.props.history.push('/');
+        
         return(
-           <div style={style} className="app-message">
+            <div style={style} className="app-message">
                 {/*-------------------------------------------MENU---------------------------------*/}
                 <MenuBar></MenuBar>
                 <div className="app-wrapper">

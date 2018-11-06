@@ -1,0 +1,21 @@
+.search-user{
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background-image: radial-gradient(73% 147%, #EADFDF 59%, #ECE2DF 100%), radial-gradient(91% 146%, rgba(255,255,255,0.50) 47%, rgba(0,0,0,0.50) 100%);
+    background-blend-mode: screen;
+    /* background: #109962; */
+}
+
+.users{ 
+    overflow-y: auto;
+    height: 100%;
+}
+
+.user{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 80px;
+}

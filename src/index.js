@@ -21,7 +21,9 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const config = {
-    userProfile: 'users', // firebase root where user profiles are stored
+    userProfile: 'users',
+    presence: 'presence',
+    sessions: 'sessions' // firebase root where user profiles are stored
 }
 
 const createStoreWithFirebase = compose(

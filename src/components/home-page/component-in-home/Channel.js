@@ -19,7 +19,7 @@ class Channel extends React.Component{
     render(){
         const {channel} = this.props;
         const activeChannel = this.props.activeChannel;
-        const isOnline = channel.connection;
+        const isOnline = channel.value.connection;
         
         return(
             <div onClick={() => {

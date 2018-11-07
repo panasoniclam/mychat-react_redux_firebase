@@ -32,7 +32,12 @@ class SiderbarLeft extends React.Component {
                     </div>
                 </div>
                 :
-                <div>Loading...</div>
+                <div className="siderbar-left">
+                    <div className="title-member">Messenger </div>
+                    <div className="channels">
+                        <div>Loading...</div>
+                    </div>
+                </div>
             )
         )
     }
@@ -42,11 +47,9 @@ const mapDispatchToProps = (dispatch) => ({
     actionUpdateListUser: (payload) => dispatch(manageUsersAction.actionUpdateListUser(payload)),
 });
 
-
-
 export default compose(
     firebaseConnect((props) => [
         { path: '/users' } // string equivalent 'todos'
     ]), // withFirebase can also be used
-    connect(({firebase: { auth, ordered, data}, manageUsersReducer }) => ({ auth, users: ordered.users, manageUsersReducer }), mapDispatchToProps)
+    connect(({firebase: { auth, ordered}}) => ({ auth, users: ordered.users}), mapDispatchToProps)
 )(SiderbarLeft)

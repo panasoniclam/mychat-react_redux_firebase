@@ -16,9 +16,6 @@ class HeaderContent extends React.Component {
                 <div className="header-content-active">      
                     <div className="profile-userchat-image-active">
                         <img src={channel.value.avatarUrl} alt="avatar" />
-                        {/* {
-                            isOnline ? <span className='user-online'></span> : <span className='user-offline'></span>
-                        } */}
                     </div>
 
                     <div className="profile-username-active">

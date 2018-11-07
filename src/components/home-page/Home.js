@@ -10,6 +10,7 @@ import SiderbarLeft from '../../components/home-page/component-in-home/SiderbarL
 import MenuBar from '../../components/home-page/component-in-home/MenuBar.js';
 import MainContent from '../../components/home-page/component-in-home/MainContent.js';
 import MessageInput from '../../components/home-page/component-in-home/MessageInput.js';
+
 import '../../styles/homepage/Home.css'
 
 class Home extends Component{

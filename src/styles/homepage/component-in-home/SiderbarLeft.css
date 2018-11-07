@@ -119,8 +119,8 @@
     border-color: white;
     background: rgb(25, 255, 17);
     border-radius: 50%;
-    right: -3px;
-    bottom: 5px;
+    right: -3px !important;
+    bottom: 5px !important;
 }
 
 .user-offline{

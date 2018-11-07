@@ -10,65 +10,43 @@ import Firebase from 'firebase';
 const widthWindow = window.innerWidth
 const heightWindow = window.innerHeight
 class LoginPage extends Component {
-    constructor(props){
-        super(props);
-        this.goToPageHome=this.goToPageHome.bind(this);
-    }
 
-    goToPageHome(){
+    goToPageHome = () => {
         this.props.history.push('/home');
     }
 
-    componentDidMount(){
+    setStateLogin = () => {
         const auth = this.props.auth;
         if(auth.isLoaded && !auth.isEmpty){
             this.props.firebase.auth().onAuthStateChanged(
                 (user) => {
                     if (user) {
-                        console.log("login");
                         const uid = user.uid;;
                         var lastOnlineRef = this.props.firebase.database().ref('users/' + uid + '/lastOnline');
                         var myConnectionsRef = this.props.firebase.database().ref('users/' + uid + '/connection');
-                        var connectedRef = this.props.firebase.database().ref('.info/connected');
-                        connectedRef.on('value', function (snap) {
-                            if (snap.val() === true) {
-                                myConnectionsRef.set(true);
-                                lastOnlineRef.onDisconnect().set(Firebase.database.ServerValue.TIMESTAMP);
-                                myConnectionsRef.onDisconnect().set(false);
-                            }
-                        });
+
+                        lastOnlineRef.set(Firebase.database.ServerValue.TIMESTAMP);
+                        myConnectionsRef.set(true);
+
+                        this.goToPageHome();
                     }
                 }
             );
-            this.goToPageHome();
-        }
+
+        } 
+    }
+
+    handelLogin = () => {
+        this.props.firebase.login({ provider: 'google', type: 'popup' });
+        this.setStateLogin();
+    }
+
+    componentDidMount(){
+        this.setStateLogin();
     }
 
     componentDidUpdate(){
-        const auth = this.props.auth;
-        if(auth.isLoaded && !auth.isEmpty){
-            this.props.firebase.auth().onAuthStateChanged(
-                (user) => {
-                    if (user) {
-                        console.log("login");
-                        const uid = user.uid;;
-                        var lastOnlineRef = this.props.firebase.database().ref('users/' + uid + '/lastOnline');
-                        var myConnectionsRef = this.props.firebase.database().ref('users/' + uid + '/connection');
-                        var connectedRef = this.props.firebase.database().ref('.info/connected');
-                        connectedRef.on('value', function (snap) {
-                            if (snap.val() === true) {
-                                myConnectionsRef.set(true);
-                                lastOnlineRef.onDisconnect().set(Firebase.database.ServerValue.TIMESTAMP);
-                                myConnectionsRef.onDisconnect().set(false);
-                            }
-                        });
-                    }
-                    this.props.setIsSignin(!!user);
-                    console.log(this.props)
-                }
-            );
-            this.goToPageHome();
-        } 
+        this.setStateLogin();
     }
 
     render() {
@@ -90,7 +68,7 @@ class LoginPage extends Component {
                         <h1 className="title-login">Signin</h1>
                     </CSSTransitionGroup>
                     <div className="btn-login-wrapper">
-                        <button class="btn-login-google"onClick={() => this.props.firebase.login({ provider: 'google', type: 'popup' })}>
+                        <button class="btn-login-google"onClick={this.handelLogin}>
                             Sign in Google
                         </button>
                     </div>
@@ -102,8 +80,6 @@ class LoginPage extends Component {
 }
 
 export default compose(
-    firebaseConnect((props) => [
-        { path: '/users' } // string equivalent 'todos'
-    ]), // withFirebase can also be used
-    connect(({firebase: { auth, ordered, data} }) => ({ auth, users: ordered.users }))
+    firebaseConnect(), // withFirebase can also be used
+    connect(({firebase: { auth, ordered} }) => ({ auth, users: ordered.users }))
 )(LoginPage)

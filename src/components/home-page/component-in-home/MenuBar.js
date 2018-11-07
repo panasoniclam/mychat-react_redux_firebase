@@ -14,46 +14,17 @@ import {withRouter} from "react-router-dom";
 
 
 class MenuBar extends React.Component {
-    constructor(props) {
-        super(props);
-        this.onCreateChannel = this.onCreateChannel.bind(this);
-        this.onLogoutApp = this.onLogoutApp.bind(this);
-    }
-    
-    onCreateChannel() {
-        // const { store } = this.props;
-        // const channelId = new ObjectID().toString();
 
-        // const currentUser = store.getCurrentUser;
-        // const currentUserId = lodash.get(currentUser, '_id');
-        // const updated = new Date();
+    onLogoutApp = () => {
+        const uid = this.props.auth.uid;
+        var lastOnlineRef = this.props.firebase.database().ref('users/' + uid + '/lastOnline');
+        var myConnectionsRef = this.props.firebase.database().ref('users/' + uid + '/connection');
 
-        // const newChannel = {
-        //     _id: channelId,
-        //     title: "New Messenger",
-        //     lastMessage: "",
-        //     avatar: avatar,
-        //     members: new OrderedMap(),
-        //     messages: new OrderedMap(),
-        //     isNew: true,
-        //     userId: currentUserId,
-        //     updated: updated.getTime(),
-        //     created: new Date(),
-        // }   
+        myConnectionsRef.set(false);
+        lastOnlineRef.set(Firebase.database.ServerValue.TIMESTAMP);
 
-        // newChannel.members = newChannel.members.set(currentUserId, currentUser); 
-        // store.onCreateNewChannel(newChannel);
-    }
-
-    onLogoutApp(){
+        this.props.firebase.logout();
         this.props.history.push('/');
-            const uid = this.props.auth.uid;;
-            var lastOnlineRef = this.props.firebase.database().ref('users/' + uid + '/lastOnline');
-            var myConnectionsRef = this.props.firebase.database().ref('users/' + uid + '/connection');
-            myConnectionsRef.set(false);
-            lastOnlineRef.set(Firebase.database.ServerValue.TIMESTAMP);
-            this.props.firebase.logout();
-            this.props.history.push('/');
     }
 
     render() {
@@ -64,6 +35,7 @@ class MenuBar extends React.Component {
                 <div className="menus">
                     <div className="icon-app">
                         <img src={avatarUser} alt="avatar"/>
+                        <span className='me-online'></span>
                     </div>
 
                     <div className="action-creategroup">

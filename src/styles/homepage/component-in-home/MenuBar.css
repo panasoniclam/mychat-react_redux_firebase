@@ -11,6 +11,10 @@
     flex-direction: column;
 }
 
+.icon-app{
+    position: relative;
+}
+
 .icon-app>img{
     width:55px;
     height: 55px;
@@ -37,4 +41,18 @@
 
 .action-logout>img:hover{
     background: rgba(241, 241, 241, 0.274);
+}
+
+.me-online{
+    width: 18px;
+    height: 18px;
+    display: block;
+    position: absolute;
+    border-style: solid;
+    border-width: 2px;
+    border-color: white;
+    background: rgb(25, 255, 17);
+    border-radius: 50%;
+    right: 5px;
+    bottom: 22px;
 }

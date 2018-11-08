@@ -73,7 +73,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default compose(
     firebaseConnect((props) => [
-        { path: '/users' } // string equivalent 'todos'
-    ]), // withFirebase can also be used
+        { path: '/users' }
+    ]), 
     connect(mapStateToProps, mapDispatchToProps)
 )(HeaderLeft)

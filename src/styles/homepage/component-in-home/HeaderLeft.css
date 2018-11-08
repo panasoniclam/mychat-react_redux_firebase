@@ -25,7 +25,8 @@
     border-bottom-right-radius: 7px;
     justify-content: flex-start;
     font-family: 'Nobile', sans-serif;
-    font-size: 15px;
+    font-size: 13px;
+    color: white;
     text-align: center;
     background-color: #65b7fa;
 }

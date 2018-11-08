@@ -10,6 +10,7 @@ import SiderbarLeft from '../../components/home-page/component-in-home/SiderbarL
 import MenuBar from '../../components/home-page/component-in-home/MenuBar.js';
 import MainContent from '../../components/home-page/component-in-home/MainContent.js';
 import MessageInput from '../../components/home-page/component-in-home/MessageInput.js';
+import FuntionBar from '../../components/home-page/component-in-home/FunctionBar.js'
 
 import '../../styles/homepage/Home.css'
 
@@ -57,7 +58,7 @@ class Home extends Component{
                         <SiderbarLeft></SiderbarLeft>
                         <div className="main-content">
                             <MainContent></MainContent>        
-                            <div className="funtions">hello</div>                  
+                            <FuntionBar></FuntionBar>          
                             <MessageInput></MessageInput>
                         </div>
                     </div>

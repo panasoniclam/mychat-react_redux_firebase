@@ -6,7 +6,7 @@ import {channelAction} from '../../../actions/channelAction';
 import { firebaseConnect} from 'react-redux-firebase';
 import { compose } from 'redux';
 import { messageAction } from '../../../actions/messageAction';
-
+import moment from 'moment';
 
 class Channel extends React.Component{
     constructor(props){
@@ -41,8 +41,6 @@ class Channel extends React.Component{
                 })
             }
         })
-
-        console.log(this.state.lastMessage);
         
         return(
             <div onClick={() => {
@@ -55,7 +53,16 @@ class Channel extends React.Component{
                     }
                 </div>
                 <div className="channel-info">
-                    <div>{channel.value.displayName}</div>
+                    <div className="channel-info-user">
+                        <div className="name-user-chat">{channel.value.displayName}</div>
+                        {
+                            (!channel.value.connection ? 
+                                <div className="time-lastonline">{moment(channel.value.lastOnline).format('MM/DD/YY, HH:mm')}</div>
+                                :
+                                null
+                            )
+                        }
+                    </div>
                     <p>{this.state.lastMessage}</p>
                 </div>
             </div>

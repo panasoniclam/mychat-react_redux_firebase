@@ -4,31 +4,33 @@ import { firebaseConnect} from 'react-redux-firebase';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import '../../../styles/homepage/component-in-home/HeaderLeft.css';
+import { manageUsersAction } from '../../../actions/manageUsersAction';
+import { channelAction } from '../../../actions/channelAction';
 
 class HeaderLeft extends React.Component {
     constructor(props) {
         super(props);
-        this.handleSearch = this.handleSearch.bind(this);
+        this.state = {
+            userNameSearch: ''
+        }
     }
 
-    handleSearch() {
-        // const { store } = this.props;
-        // if (store.getNameUserSearch && store.getNameUserSearch.trim().length > 0) {
-        //     store.setShowComponentSearch(true);
-        //     store.searchNameUserChat().then((result) => {
-        //         store.setListUsersSearch(result);
-        //         store.setNameUserSearch('');                
-        //     }).catch((err) => {
-        //         if (err === 403) {
-        //             this.onLogoutApp();
-        //         }
-        //         if (err === 404) {
-        //             store.clearListUsersSearch();
-        //         }
-        //     })
-        // } else {
-        //     store.setNameUserSearch('');
-        // }
+    handleSearch = () => {
+        const userNameSearch = this.state.userNameSearch;
+        const channels = this.props.users;
+
+        console.log(channels);
+        var channel =  channels.find((channel) => channel.value.displayName === userNameSearch);
+        
+        let payload = {};
+        payload.activeChannel = channel;
+        this.props.actionsSetActiveChannel(payload);
+    }
+
+    handleChange = (event) => {
+        this.setState({
+            userNameSearch: event.target.value
+        })
     }
 
     render() {
@@ -39,10 +41,17 @@ class HeaderLeft extends React.Component {
                 </div>
                 <div className="search">
                     <div className="input-search">
-                        <input/>
+                        <input onKeyUp={(event) => {
+                                if (event.key === 'Enter') {
+                                        this.handleSearch();
+                                    }
+                                }}                     
+                                onChange={this.handleChange}
+                                value={this.state.userNameSearch} placeholder="Search messager..."
+                            />
                     </div>
                     <div className="action-search">
-                        <button>Search</button>
+                        <button onClick={this.handleSearch}>Search</button>
                     </div>
                 </div>
             </div>
@@ -50,8 +59,20 @@ class HeaderLeft extends React.Component {
     }
 }
 
-export default compose(
-    firebaseConnect(), // withFirebase can also be used
-    connect(({firebase: { auth } }) => ({ auth }))
-)(withRouter(HeaderLeft))
 
+const mapStateToProps = (state) => ({
+    auth: state.firebase.auth,
+    users: state.firebase.ordered.users
+})
+
+const mapDispatchToProps = (dispatch) => ({
+    actionUpdateListUser: (payload) => dispatch(manageUsersAction.actionUpdateListUser(payload)),
+    actionsSetActiveChannel: (payload) => dispatch(channelAction.actionsSetActiveChannel(payload)),
+});
+
+export default compose(
+    firebaseConnect((props) => [
+        { path: '/users' } // string equivalent 'todos'
+    ]), // withFirebase can also be used
+    connect(mapStateToProps, mapDispatchToProps)
+)(HeaderLeft)

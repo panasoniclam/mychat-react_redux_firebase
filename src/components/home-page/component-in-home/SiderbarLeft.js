@@ -5,6 +5,7 @@ import { firebaseConnect, isLoaded, isEmpty } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import {manageUsersAction} from '../../../actions/manageUsersAction.js';
+import lodash from 'lodash';
 
 class SiderbarLeft extends React.Component {
     
@@ -12,7 +13,9 @@ class SiderbarLeft extends React.Component {
         var channels = [];
         const auth = this.props.auth;
         if(auth.isLoaded && !auth.isEmpty){
-            channels = this.props.users;
+            var channelsTmp = this.props.users;
+            channels = lodash.sortBy(channelsTmp, value => -value.lastOnline);
+            console.log( channels);
         }
     
         return (

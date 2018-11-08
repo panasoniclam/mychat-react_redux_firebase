@@ -44,8 +44,8 @@ class MainContent extends React.Component {
             messages.on('value', snapshot => {
                 if(snapshot.val()){
                     var listMessages = lodash.values(snapshot.val());
-                    if(listMessages.length !== this.props.listMessages.length && listMessages.lenght !== 0 ||
-                        listMessages[0].to !== this.props.listMessages[0].to){
+                    if((listMessages.length !== this.props.listMessages.length && listMessages.lenght !== 0) ||
+                        (listMessages[0].to !== this.props.listMessages[0].to)){
                         let payload = {};
                         payload.listMessages = listMessages;
                         this.props.actionSetListMessages(payload);
@@ -81,7 +81,7 @@ class MainContent extends React.Component {
                                 </div>
                                 <div className="message-user-image">
                                     {   
-                                        (index === 0 || index > 0 && message.from !== this.props.listMessages[index - 1].from) ?
+                                        (index === 0 || (index > 0 && message.from !== this.props.listMessages[index - 1].from)) ?
                                             <img src={this.props.auth.photoURL} alt="avatar" />
                                             :
                                             <div className="no-image"/>
@@ -92,7 +92,7 @@ class MainContent extends React.Component {
                             <div key={index} className="message">
                                 <div className="message-user-image">
                                     {   
-                                        (index === 0 || index > 0 && message.from !== this.props.listMessages[index - 1].from) ?
+                                        (index === 0 || (index > 0 && message.from !== this.props.listMessages[index - 1].from)) ?
                                             <img src={activeChannel.value.avatarUrl} alt="avatar" />
                                             :
                                             <div className="no-image"/>

@@ -136,3 +136,18 @@
     right: -3px;
     bottom: 3px;
 }
+
+.channel-info-user{
+    display: flex;
+    flex-direction: row;
+}
+
+.time-lastonline{
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    color: rgb(128, 128, 128);
+}
+
+.name-user-chat{
+    width: 200px;
+}

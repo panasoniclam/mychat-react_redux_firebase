@@ -36,11 +36,11 @@ class MessageInput extends React.Component {
             messages.push({
                 from: myId,
                 to: userChatId,
-                message: this.props.message,
+                message: newMessage,
                 createTime: new Date().getTime(),
             })
 
-            lastMessage.set(this.props.message);
+            lastMessage.set(newMessage);
 
             let payload = {};
             payload.message = '';

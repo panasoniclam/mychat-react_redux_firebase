@@ -32,6 +32,14 @@ class MainContent extends React.Component {
         this.scrollMessageToBottom();
     }
     
+    checkURLIsLinkImage = (url) => {
+        var check ='';
+        var res = url.split("\n");
+        check = (res[0].match(/\.(jpeg|jpg|gif|png)$/) != null);
+
+        return check;
+    }
+
     render() {
         const activeChannel = this.props.activeChannel;
         const myId = this.props.auth.uid;
@@ -72,9 +80,16 @@ class MainContent extends React.Component {
                         (isMe ? 
                             <div key={index} className="message-me">
                                 <div className="message-body-me">
-                                    <div className='message-text-me'>
-                                        {this.renderMessage(message.message)}
-                                    </div>
+                                    {
+                                        this.checkURLIsLinkImage(message.message) ? 
+                                            <div className="message-image">
+                                                <img src={message.message} alt="avatar"></img>
+                                            </div>
+                                            :
+                                            <div className="message-text-me">
+                                                {this.renderMessage(message.message)}
+                                            </div>
+                                    }
                                     <div className ="created-message">
                                         <div>{moment(message.createTime).format('MM/DD/YY, HH:mm')}</div>
                                     </div>
@@ -102,9 +117,16 @@ class MainContent extends React.Component {
                                     <div className='message-author'>
                                         {activeChannel.value.displayName}
                                     </div>
-                                    <div className='message-text'>
-                                        {this.renderMessage(message.message)}
-                                    </div>
+                                    {
+                                        this.checkURLIsLinkImage(message.message) ? 
+                                            <div className="message-image">
+                                                <img src={message.message} alt="avatar"></img>
+                                            </div>
+                                            :
+                                            <div className="message-text-me">
+                                                {this.renderMessage(message.message)}
+                                            </div>
+                                    }
                                     <div className ="created-message">
                                         <div>{moment(message.createTime).format('MM/DD/YY, HH:mm')}</div>
                                     </div>

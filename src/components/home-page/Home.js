@@ -56,7 +56,8 @@ class Home extends Component{
                     <div className="main-message">
                         <SiderbarLeft></SiderbarLeft>
                         <div className="main-content">
-                            <MainContent></MainContent>                          
+                            <MainContent></MainContent>        
+                            <div className="funtions">hello</div>                  
                             <MessageInput></MessageInput>
                         </div>
                     </div>

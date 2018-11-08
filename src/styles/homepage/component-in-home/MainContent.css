@@ -34,7 +34,7 @@
     border-radius: 10px;
     padding: 12px;
     margin-left: 10px;
-    max-width: 900px;
+    max-width: 1000px;
 }
 
 .message-author{
@@ -79,4 +79,10 @@
     margin-top: 4px;
     font-size: 13px;
     color: rgb(128, 128, 128);
+}
+
+.message-image>img{
+    overflow: hidden;
+    word-wrap: break-word;
+    width: 800px;
 }

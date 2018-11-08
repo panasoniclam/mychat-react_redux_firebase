@@ -19,12 +19,13 @@ class HeaderLeft extends React.Component {
         const userNameSearch = this.state.userNameSearch;
         const channels = this.props.users;
 
-        console.log(channels);
         var channel =  channels.find((channel) => channel.value.displayName === userNameSearch);
-        
-        let payload = {};
-        payload.activeChannel = channel;
-        this.props.actionsSetActiveChannel(payload);
+    
+        if(channel){
+            let payload = {};
+            payload.activeChannel = channel;
+            this.props.actionsSetActiveChannel(payload);
+        }
     }
 
     handleChange = (event) => {

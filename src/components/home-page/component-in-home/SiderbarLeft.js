@@ -15,7 +15,6 @@ class SiderbarLeft extends React.Component {
         if(auth.isLoaded && !auth.isEmpty){
             var channelsTmp = this.props.users;
             channels = lodash.sortBy(channelsTmp, value => -value.lastOnline);
-            console.log( channels);
         }
     
         return (

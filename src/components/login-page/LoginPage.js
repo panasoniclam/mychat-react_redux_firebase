@@ -26,7 +26,7 @@ class LoginPage extends Component {
 
                         lastOnlineRef.set(Firebase.database.ServerValue.TIMESTAMP);
                         myConnectionsRef.set(true);
-
+            
                         this.goToPageHome();
                     }
                 }

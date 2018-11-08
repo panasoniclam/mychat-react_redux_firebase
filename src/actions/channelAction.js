@@ -8,5 +8,5 @@ const actionsSetActiveChannel = (payload) => ({
 });
 
 export const channelAction = {
-    actionsSetActiveChannel
+    actionsSetActiveChannel,
 }

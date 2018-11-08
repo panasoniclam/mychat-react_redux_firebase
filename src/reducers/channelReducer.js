@@ -1,7 +1,7 @@
 import {channelConstant} from '../constants/channelConstant';
 
 const initalState = {
-    activeChannel: ''
+    activeChannel: '',
 }
 
 export default function manageUsersReducer(state=initalState, actions){

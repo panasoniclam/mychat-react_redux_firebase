@@ -39,9 +39,9 @@ class MainContent extends React.Component {
 
         if(activeChannel){
             const channelId = (myId < userChatId) ? myId + userChatId : userChatId + myId;
-            var channel = this.props.firebase.database().ref('messages/' + channelId);
+            var messages = this.props.firebase.database().ref('channels/' + channelId + '/messages');
 
-            channel.on('value', snapshot => {
+            messages.on('value', snapshot => {
                 if(snapshot.val()){
                     var listMessages = lodash.values(snapshot.val());
                     if(listMessages.length !== this.props.listMessages.length && listMessages.lenght !== 0 ||

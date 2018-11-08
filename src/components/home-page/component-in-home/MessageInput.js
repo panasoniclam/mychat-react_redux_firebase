@@ -30,7 +30,8 @@ class MessageInput extends React.Component {
             }
 
             const channelId = (myId < userChatId) ? myId + userChatId : userChatId + myId;
-            var messages = this.props.firebase.database().ref('messages/' + channelId);
+            var messages = this.props.firebase.database().ref('channels/' + channelId + '/messages');
+            var lastMessage = this.props.firebase.database().ref('channels/' + channelId + '/lastMessage');
 
             messages.push({
                 from: myId,
@@ -38,6 +39,8 @@ class MessageInput extends React.Component {
                 message: this.props.message,
                 createTime: new Date().getTime(),
             })
+
+            lastMessage.set(this.props.message);
 
             let payload = {};
             payload.message = '';

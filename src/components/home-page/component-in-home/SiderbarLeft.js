@@ -43,6 +43,11 @@ class SiderbarLeft extends React.Component {
     }
 }
 
+const mapStateToProps = (state) => ({
+    auth: state.firebase.auth,
+    users: state.firebase.ordered.users
+})
+
 const mapDispatchToProps = (dispatch) => ({
     actionUpdateListUser: (payload) => dispatch(manageUsersAction.actionUpdateListUser(payload)),
 });
@@ -51,5 +56,5 @@ export default compose(
     firebaseConnect((props) => [
         { path: '/users' } // string equivalent 'todos'
     ]), // withFirebase can also be used
-    connect(({firebase: { auth, ordered}}) => ({ auth, users: ordered.users}), mapDispatchToProps)
+    connect(mapStateToProps, mapDispatchToProps)
 )(SiderbarLeft)

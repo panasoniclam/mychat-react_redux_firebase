@@ -2,42 +2,54 @@
 import React from 'react';
 import '../../../styles/homepage/component-in-home/SearchUser.css';
 import '../../../styles/homepage/component-in-home/MessageInput.css';
-import ObjectId from 'bson-objectid';
-import Lodash from 'lodash'
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { firebaseConnect} from 'react-redux-firebase';
+import {channelAction} from '../../../actions/channelAction.js';
+import {messageAction} from '../../../actions/messageAction.js';
 
 class MessageInput extends React.Component {
-    constructor(props) {
-        super(props);
-        this.handleSend = this.handleSend.bind(this);
+    handleChange = (event) => {
+        let payload = {};
+        payload.message = event.target.value;
+        this.props.actionSetMessage(payload);
     }
 
-    handleSend() {
-        const newMessage = {};
-        
+    handleSend = () => {
+        const activeChannel = this.props.activeChannel;
+        const myId = this.props.auth.uid;
+        const userChatId = this.props.activeChannel.key;
+        const newMessage = this.props.message;
+
         if (newMessage && newMessage.trim().length > 0) {
-            const messageId = new ObjectId().toString();
-            const channel = {};
-            if(!channel || channel.title === "New Messenger"){
+            if(!activeChannel){
+                let payload = {};
+                payload.message = '';
+                this.props.actionSetMessage(payload);
                 return;
             }
-            
-            const user = {};
 
-            const message = {
-                id: messageId,
-                channelId: channel.id,
-                body: newMessage,
-                userId: Lodash.get(user, 'id'),
-                me: true,
-            };    
-            // store.addMessage(message);
-            // store.setNewMessage('');
+            const channelId = (myId < userChatId) ? myId + userChatId : userChatId + myId;
+            var messages = this.props.firebase.database().ref('messages/' + channelId);
+
+            messages.push({
+                from: myId,
+                to: userChatId,
+                message: this.props.message,
+                createTime: new Date().getTime(),
+            })
+
+            let payload = {};
+            payload.message = '';
+            this.props.actionSetMessage(payload);
+        }else{
+            let payload = {};
+            payload.message = '';
+            this.props.actionSetMessage(payload);
+            return;
         }
     }
-
     render() {
-        console.log("message input");
-
         return (
             <div className="message-input">
                 <div className="text-input">
@@ -46,9 +58,7 @@ class MessageInput extends React.Component {
                             this.handleSend();
                         }
                     }}
-                        onChange={(event) => {
-                            // store.setNewMessage(event.target.value);
-                        }} value={''} placeholder="Write your message..." />
+                    value={this.props.message} onChange={this.handleChange}  placeholder="Write your message..." />
                 </div>
 
                 <div className="action-send">
@@ -59,4 +69,19 @@ class MessageInput extends React.Component {
     }
 }
 
-export default MessageInput;
+const mapStateToProps = (state) => ({
+    activeChannel: state.channelReducer.activeChannel,
+    message: state.messageReducer.message,
+    auth: state.firebase.auth,
+    users: state.firebase.ordered.users,
+})
+
+const mapDispatchToProps = (dispatch) => ({
+    actionsSetActiveChannel: (payload) => dispatch(channelAction.actionsSetActiveChannel(payload)),
+    actionSetMessage: (payload) => dispatch(messageAction.actionSetMessage(payload))
+});
+
+export default compose(
+    firebaseConnect((props) => [{ path: '/users' }]),
+    connect(mapStateToProps, mapDispatchToProps)
+)(MessageInput)

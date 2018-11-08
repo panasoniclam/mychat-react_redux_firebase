@@ -4,7 +4,6 @@ import '../../styles/login-page/LoginPage.css';
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { firebaseConnect} from 'react-redux-firebase'
-import {withRouter} from "react-router-dom";
 import Firebase from 'firebase';
 
 const widthWindow = window.innerWidth
@@ -36,7 +35,7 @@ class LoginPage extends Component {
         } 
     }
 
-    handelLogin = () => {
+    handleLogin = () => {
         this.props.firebase.login({ provider: 'google', type: 'popup' });
         this.setStateLogin();
     }
@@ -68,7 +67,7 @@ class LoginPage extends Component {
                         <h1 className="title-login">Signin</h1>
                     </CSSTransitionGroup>
                     <div className="btn-login-wrapper">
-                        <button class="btn-login-google"onClick={this.handelLogin}>
+                        <button class="btn-login-google"onClick={this.handleLogin}>
                             Sign in Google
                         </button>
                     </div>
@@ -81,5 +80,5 @@ class LoginPage extends Component {
 
 export default compose(
     firebaseConnect(), // withFirebase can also be used
-    connect(({firebase: { auth, ordered} }) => ({ auth, users: ordered.users }))
+    connect(({firebase: { auth} }) => ({ auth}))
 )(LoginPage)

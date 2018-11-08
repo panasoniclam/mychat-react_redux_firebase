@@ -7,25 +7,24 @@ import {channelAction} from '../../../actions/channelAction';
 
 class HeaderContent extends React.Component {
     render() {
-        console.log("Header contend");
-        const channel = this.props.activeChannel;
+        const activeChannel = this.props.activeChannel;
         // const isOnline = channel.connection;
 
         return (
-            (channel !== '' ? 
+            (activeChannel !== '' ? 
                 <div className="header-content-active">      
                     <div className="profile-userchat-image-active">
-                        <img src={channel.value.avatarUrl} alt="avatar" />
+                        <img src={activeChannel.value.avatarUrl} alt="avatar" />
                     </div>
 
                     <div className="profile-username-active">
-                        <div>{channel.value.displayName}</div>
+                        <div>{activeChannel.value.displayName}</div>
                     </div>
                 </div>
                 :
                 <div className="header-content">    
                     <div className="profile-userchat-image">
-                        {!channel ? null : 
+                        {!activeChannel ? null : 
                         <img src={avatar} alt="avatar" />}
                     </div>
                 </div>

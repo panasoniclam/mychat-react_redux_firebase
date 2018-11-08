@@ -1,11 +1,12 @@
 import React from 'react';
 import lodash from 'lodash';
-import SearchUser from '../../home-page/component-in-home/SearchUser.js';
 import '../../../styles/homepage/component-in-home/MainContent.css';
-import {withRouter} from "react-router-dom";
+import { connect } from 'react-redux';
 import moment from 'moment';
-
-const messagesChannel = [];
+import {channelAction} from '../../../actions/channelAction.js';
+import { firebaseConnect} from 'react-redux-firebase';
+import { compose } from 'redux';
+import { messageAction } from '../../../actions/messageAction';
 
 class MainContent extends React.Component {
     constructor(props) {
@@ -15,8 +16,7 @@ class MainContent extends React.Component {
     }
 
     renderMessage(message) {
-        const tmp = message.body;
-        const html = lodash.split(tmp, '\n').map((text, key) => {
+        const html = lodash.split(message, '\n').map((text, key) => {
             return <div key={key} dangerouslySetInnerHTML={{ __html: text }} />
         })
         return html;
@@ -31,65 +31,106 @@ class MainContent extends React.Component {
     componentDidUpdate() {
         this.scrollMessageToBottom();
     }
-
-    onLogoutApp(){
-        this.props.history.push('/');
-    }
-
+    
     render() {
-        console.log("Main content");
-        const isLogOut = false;
-        // const size = store.messages.size;
-        if(isLogOut){
-            this.onLogoutApp();
+        const activeChannel = this.props.activeChannel;
+        const myId = this.props.auth.uid;
+        const userChatId = activeChannel.key;
+
+        if(activeChannel){
+            const channelId = (myId < userChatId) ? myId + userChatId : userChatId + myId;
+            var channel = this.props.firebase.database().ref('messages/' + channelId);
+
+            channel.on('value', snapshot => {
+                if(snapshot.val()){
+                    var listMessages = lodash.values(snapshot.val());
+                    if(listMessages.length !== this.props.listMessages.length && listMessages.lenght !== 0 ||
+                        listMessages[0].to !== this.props.listMessages[0].to){
+                        let payload = {};
+                        payload.listMessages = listMessages;
+                        this.props.actionSetListMessages(payload);
+                    }                    
+                }else{
+                    if(this.props.listMessages.length !== 0){
+                        let payload = {};
+                        payload.listMessages = [];
+                        this.props.actionSetListMessages(payload);
+                    }   
+                }
+            })
         }
+
         return (
-            (false) ?
-                <SearchUser></SearchUser>
-                :
-                <div ref={(refe) => { this.refMessage = refe }} className="messages">
-                    {messagesChannel.map((message, index) => {
-                        const userId = lodash.get(message, 'userId');
-                        // const user = store.getUserInCache(userId);
-                        const user = {};
-                        return (
-                            (message.me ? 
+            <div ref={(refe) => { this.refMessage = refe }} className="messages">
+                {this.props.listMessages.map((message, index) => {
+                    var isMe = false;
+                    
+                    if(message.from === this.props.auth.uid){
+                        isMe = true;
+                    }
+                    return (
+                        (isMe ? 
                             <div key={index} className="message-me">
                                 <div className="message-body-me">
                                     <div className='message-text-me'>
-                                        {this.renderMessage(message)}
+                                        {this.renderMessage(message.message)}
                                     </div>
                                     <div className ="created-message">
-                                        <div>{moment(message.created).format('MM/DD/YY, HH:mm')}</div>
+                                        <div>{moment(message.createTime).format('MM/DD/YY, HH:mm')}</div>
                                     </div>
                                 </div>
                                 <div className="message-user-image">
-                                    <img src={lodash.get(user, 'avatar')} alt="avatar" />
+                                    {   
+                                        (index === 0 || index > 0 && message.from !== this.props.listMessages[index - 1].from) ?
+                                            <img src={this.props.auth.photoURL} alt="avatar" />
+                                            :
+                                            <div className="no-image"/>
+                                    }
                                 </div>
                             </div>
                             :
                             <div key={index} className="message">
                                 <div className="message-user-image">
-                                    <img src={lodash.get(user, 'avatar')} alt="avatar" />
+                                    {   
+                                        (index === 0 || index > 0 && message.from !== this.props.listMessages[index - 1].from) ?
+                                            <img src={activeChannel.value.avatarUrl} alt="avatar" />
+                                            :
+                                            <div className="no-image"/>
+                                    }
                                 </div>
                                 <div className='message-body'>
                                     <div className='message-author'>
-                                        {lodash.get(user,'name')}
+                                        {activeChannel.value.displayName}
                                     </div>
                                     <div className='message-text'>
-                                        {this.renderMessage(message)}
+                                        {this.renderMessage(message.message)}
                                     </div>
                                     <div className ="created-message">
-                                        <div>{moment(message.created).format('MM/DD/YY, HH:mm')}</div>
+                                        <div>{moment(message.createTime).format('MM/DD/YY, HH:mm')}</div>
                                     </div>
                                 </div>
                             </div>
-                            )
-                        );
-                    })}
-                </div>
+                        )
+                    );
+                })}
+            </div>
         )
     }
 }
 
-export default withRouter(MainContent);
+
+const mapStateToProps = (state) => ({
+    activeChannel: state.channelReducer.activeChannel,
+    listMessages: state.messageReducer.listMessages,
+    auth: state.firebase.auth,
+})
+
+const mapDispatchToProps = (dispatch) => ({
+    actionsSetActiveChannel: (payload) => dispatch(channelAction.actionsSetActiveChannel(payload)),
+    actionSetListMessages: (payload) => dispatch(messageAction.actionSetListMessages(payload))
+});
+
+export default compose(
+    firebaseConnect(),
+    connect(mapStateToProps, mapDispatchToProps)
+)(MainContent)

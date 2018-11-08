@@ -3,12 +3,7 @@ import { firebaseConnect} from 'react-redux-firebase';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import Firebase from 'firebase';
-import iconGroupChat from '../../../resources/iconadd.png';
-import iconAppChat from '../../../resources/iconapp.png';
 import iconLogOut from '../../../resources/iconlogout.png';
-// import ObjectID from 'bson-objectid';
-// import { OrderedMap } from 'immutable';
-// import lodash from 'lodash';
 import '../../../styles/homepage/component-in-home/MenuBar.css';
 import {withRouter} from "react-router-dom";
 
@@ -28,7 +23,6 @@ class MenuBar extends React.Component {
     }
 
     render() {
-        console.log("menubar");
         const avatarUser = this.props.auth.photoURL;
         return (
             <div className="menu-bar">
@@ -36,10 +30,6 @@ class MenuBar extends React.Component {
                     <div className="icon-app">
                         <img src={avatarUser} alt="avatar"/>
                         <span className='me-online'></span>
-                    </div>
-
-                    <div className="action-creategroup">
-                        <img src={iconGroupChat} alt="avatar" onClick={this.onCreateChannel}/>
                     </div>
 
                     <div className="action-logout">

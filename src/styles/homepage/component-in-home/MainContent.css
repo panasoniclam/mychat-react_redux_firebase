@@ -22,6 +22,12 @@
     object-fit: cover;
 }
 
+.no-image{
+    width:40px;
+    height: 40px;
+    border: none;
+}
+
 .message-body{
     overflow: hidden;
     background: #ffffff;
@@ -54,7 +60,7 @@
 
 .message-body-me{
     overflow: hidden;
-    background: #22e99377;
+    background: #b4e7ffbb;
     border-radius: 10px;
     padding: 10px;
     margin-right: 10px;

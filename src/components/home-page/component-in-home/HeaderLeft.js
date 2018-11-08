@@ -1,5 +1,8 @@
 import React from 'react';
 import { withRouter } from "react-router-dom"
+import { firebaseConnect} from 'react-redux-firebase';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import '../../../styles/homepage/component-in-home/HeaderLeft.css';
 
 class HeaderLeft extends React.Component {
@@ -29,9 +32,11 @@ class HeaderLeft extends React.Component {
     }
 
     render() {
-        console.log("header left");
         return (
             <div className="header-left">
+                <div className="name-user">
+                    {"Smilo - " + this.props.auth.displayName}
+                </div>
                 <div className="search">
                     <div className="input-search">
                         <input/>
@@ -45,4 +50,8 @@ class HeaderLeft extends React.Component {
     }
 }
 
-export default withRouter(HeaderLeft);
+export default compose(
+    firebaseConnect(), // withFirebase can also be used
+    connect(({firebase: { auth } }) => ({ auth }))
+)(withRouter(HeaderLeft))
+

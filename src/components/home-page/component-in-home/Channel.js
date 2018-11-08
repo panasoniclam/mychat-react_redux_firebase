@@ -14,6 +14,7 @@ class Channel extends React.Component{
         let payload = {};
         payload.activeChannel = channel;
         this.props.actionsSetActiveChannel(payload);
+
     }
 
     render(){
@@ -52,11 +53,12 @@ class Channel extends React.Component{
 }
 
 const mapStateToProps = (state) => ({
-    activeChannel: state.channelReducer.activeChannel,
+    activeChannel: state.channelReducer.activeChannel
 })
 
 const mapDispatchToProps = (dispatch) => ({
     actionsSetActiveChannel: (payload) => dispatch(channelAction.actionsSetActiveChannel(payload)),
+    
 });
 
 

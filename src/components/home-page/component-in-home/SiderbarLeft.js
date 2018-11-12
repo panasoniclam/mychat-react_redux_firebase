@@ -6,11 +6,16 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import {manageUsersAction} from '../../../actions/manageUsersAction.js';
 import lodash from 'lodash';
-
+import ReactLoading from "react-loading";
 class SiderbarLeft extends React.Component {
-    
+    type = "spokes";
     render() {
         var channels = [];
+        const loader =
+        <div className="loader" key={0}>
+            <ReactLoading type="spokes" color="black" height={25} width={25}/>
+        </div>
+
         const auth = this.props.auth;
         if(auth.isLoaded && !auth.isEmpty){
             var channelsTmp = this.props.users;
@@ -37,7 +42,7 @@ class SiderbarLeft extends React.Component {
                 <div className="siderbar-left">
                     <div className="title-member">Messenger </div>
                     <div className="channels">
-                        <div>Loading...</div>
+                        <div>{loader}</div>
                     </div>
                 </div>
             )

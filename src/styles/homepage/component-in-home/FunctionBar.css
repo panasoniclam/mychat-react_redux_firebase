@@ -41,3 +41,8 @@
     font-size: 20px;
     cursor:pointer;
 }
+
+.loader{
+    margin-left: 8px;
+    margin-top: 7px
+}

@@ -58,7 +58,6 @@ class MainContent extends React.Component {
                         (listMessages[0].to !== this.props.listMessages[0].to)){
                         let payload = {};
                         payload.listMessages = listMessages;
-                        
                         this.props.actionSetListMessages(payload);
                     }                    
                 }else{

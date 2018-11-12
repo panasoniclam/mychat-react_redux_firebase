@@ -6,12 +6,18 @@ import { compose } from 'redux';
 import { firebaseConnect} from 'react-redux-firebase';
 import {channelAction} from '../../../actions/channelAction.js';
 import {messageAction} from '../../../actions/messageAction.js';
+import ReactLoading from "react-loading";
 class FunctionBar extends Component{
     constructor(props) {
         super(props);
-        this.state = {file: ''};
+        this.state = {
+            file: '',
+            isLoading: false
+        };
     }
-    
+
+    type = "spokes";
+
     fileChangedHandler = (event) => {
         this.setState({
             file: event.target.files[0]
@@ -26,10 +32,11 @@ class FunctionBar extends Component{
             uploadImage.snapshot.ref.getDownloadURL().then((downloadURL) =>{
                 this.handleSend(downloadURL);   
             });
-        })
+        })   
         this.setState({
             file: '',
-        })   
+            isLoading: true
+        })
     }
 
     handleSend = (newMessage) => {
@@ -42,6 +49,9 @@ class FunctionBar extends Component{
                 let payload = {};
                 payload.message = '';
                 this.props.actionSetMessage(payload);
+                this.setState({
+                    isLoading: false
+                })
                 return;
             }
 
@@ -57,6 +67,11 @@ class FunctionBar extends Component{
             })
 
             lastMessage.set(newMessage);
+
+            this.setState({
+                file: '',
+                isLoading: false
+            })
         }else{
             let payload = {};
             payload.message = '';
@@ -69,10 +84,19 @@ class FunctionBar extends Component{
         if(this.state.file !== ''){
             this.uploadHandler(this.state.file);
         }
+        const loader =
+        <div className="loader" key={0}>
+            <ReactLoading type="spokes" color="black" height={25} width={25}/>
+        </div>
         return(
             <div className="container-function-bar">
                 <div className="button-upload-image">
-                    <img src={imageUpload} onClick={this.fileChangedHandler} alt=""></img>
+                    {
+                        this.state.isLoading ? 
+                        <div>{loader}</div>
+                        :
+                        <img src={imageUpload} onClick={this.fileChangedHandler} alt=""></img>
+                    }
                     <input className="input-file" type="file" value='' onChange={this.fileChangedHandler} accept="image/*"/>
                 </div>
             </div>

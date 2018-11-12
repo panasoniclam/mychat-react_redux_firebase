@@ -7,7 +7,6 @@ import {channelAction} from '../../../actions/channelAction.js';
 import { firebaseConnect} from 'react-redux-firebase';
 import { compose } from 'redux';
 import { messageAction } from '../../../actions/messageAction';
-
 class MainContent extends React.Component {
     constructor(props) {
         super(props);

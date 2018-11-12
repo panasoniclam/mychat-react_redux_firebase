@@ -11,7 +11,7 @@ import MenuBar from '../../components/home-page/component-in-home/MenuBar.js';
 import MainContent from '../../components/home-page/component-in-home/MainContent.js';
 import MessageInput from '../../components/home-page/component-in-home/MessageInput.js';
 import FuntionBar from '../../components/home-page/component-in-home/FunctionBar.js'
-
+import Firebase from 'firebase';
 import '../../styles/homepage/Home.css'
 
 class Home extends Component{
@@ -31,7 +31,6 @@ class Home extends Component{
 
     componentDidMount() {
         window.addEventListener('resize', this.onresize);
-        // this.addTestMessages();
     }
 
     componentWillUnmount() {

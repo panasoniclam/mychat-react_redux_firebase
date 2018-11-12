@@ -19,7 +19,28 @@ class MenuBar extends React.Component {
         lastOnlineRef.set(Firebase.database.ServerValue.TIMESTAMP);
 
         this.props.firebase.logout();
+
         this.props.history.push('/');
+    }
+
+    handleWindowClose = () => {
+        alert('1111');
+        const uid = this.props.auth.uid;
+        var lastOnlineRef = this.props.firebase.database().ref('users/' + uid + '/lastOnline');
+        var myConnectionsRef = this.props.firebase.database().ref('users/' + uid + '/connection');
+
+        myConnectionsRef.set(false);
+        lastOnlineRef.set(Firebase.database.ServerValue.TIMESTAMP);
+
+        this.props.firebase.logout();
+    }
+
+    componentDidMount() {
+        window.addEventListener('onbeforeunload', this.handleWindowClose);
+    }
+    
+    componentWillUnmount() {
+        window.removeEventListener('onbeforeunload', this.handleWindowClose);
     }
 
     render() {

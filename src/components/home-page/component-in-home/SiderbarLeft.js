@@ -19,9 +19,31 @@ class SiderbarLeft extends React.Component {
         const auth = this.props.auth;
         if(auth.isLoaded && !auth.isEmpty){
             var channelsTmp = this.props.users;
-            channels = lodash.sortBy(channelsTmp, value => -value.lastOnline);
+            channels = lodash.sortBy(channelsTmp, value => value.lastOnline);
         }
-    
+        
+        const idStarChannel = this.props.idStarChannel;
+
+        if(idStarChannel !== ''){
+            var channelTmp = '';
+            var indexChannel = '';
+
+            channels.forEach((channel, index) => {
+                if(channel.key === idStarChannel){
+                    if(channel.value.connection){
+                        indexChannel = index;
+                        channelTmp = channel;
+                        
+                    }
+                }
+            })
+
+            if(channelTmp !== ''){
+                channels.splice(indexChannel, 1);
+                channels.unshift(channelTmp);
+            }
+        }
+
         return (
             ((isLoaded(this.props.users) && !isEmpty(this.props.users)) ?
                 <div className="siderbar-left">
@@ -52,7 +74,8 @@ class SiderbarLeft extends React.Component {
 
 const mapStateToProps = (state) => ({
     auth: state.firebase.auth,
-    users: state.firebase.ordered.users
+    users: state.firebase.ordered.users,
+    idStarChannel: state.channelReducer.idStarChannel
 })
 
 const mapDispatchToProps = (dispatch) => ({

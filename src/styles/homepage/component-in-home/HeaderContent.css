@@ -11,7 +11,6 @@
 
 .header-content-active{
     flex-grow: 1;
-    /* width: 1215px; */
     overflow: hidden;
     border-bottom: 0.5px solid rgb(200, 200, 200);
     display: flex;
@@ -99,4 +98,11 @@
     border-radius: 50%;
     right: -3px;
     bottom: 3px;
+}
+.star{
+    margin-right: 20px;
+}
+
+.star>img:hover{
+    content:url(../../../resources/icon-star-full.png);
 }

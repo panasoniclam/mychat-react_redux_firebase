@@ -26,12 +26,13 @@ class LoginPage extends Component {
 
                         lastOnlineRef.set(Firebase.database.ServerValue.TIMESTAMP);
                         myConnectionsRef.set(true);
-            
+                        // myConnectionsRef.onDisconnect().set(false);
+                        // lastOnlineRef.onDisconnect().set(Firebase.database.ServerValue.TIMESTAMP);
+
                         this.goToPageHome();
                     }
                 }
             );
-
         } 
     }
 

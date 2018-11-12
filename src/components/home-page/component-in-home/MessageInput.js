@@ -52,6 +52,7 @@ class MessageInput extends React.Component {
             return;
         }
     }
+    
     render() {
         return (
             <div className="message-input">

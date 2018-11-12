@@ -14,7 +14,7 @@ var firebaseConfig = {
     authDomain: "chatweb-8c888.firebaseapp.com",
     databaseURL: "https://chatweb-8c888.firebaseio.com",
     projectId: "chatweb-8c888",
-    storageBucket: "",
+    storageBucket: "chatweb-8c888.appspot.com",
     messagingSenderId: "643563804995"
 };
 

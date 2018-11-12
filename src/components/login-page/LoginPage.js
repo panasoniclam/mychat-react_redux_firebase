@@ -67,7 +67,7 @@ class LoginPage extends Component {
                         <h1 className="title-login">Signin</h1>
                     </CSSTransitionGroup>
                     <div className="btn-login-wrapper">
-                        <button class="btn-login-google"onClick={this.handleLogin}>
+                        <button className="btn-login-google"onClick={this.handleLogin}>
                             Sign in Google
                         </button>
                     </div>

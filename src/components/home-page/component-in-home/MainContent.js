@@ -36,7 +36,9 @@ class MainContent extends React.Component {
         var check ='';
         var res = url.split("\n");
         check = (res[0].match(/\.(jpeg|jpg|gif|png)$/) != null);
-
+        if(url.indexOf("https://firebasestorage.googleapis.com/v0/b/chatweb-8c888.appspot.com/o/image") !== -1){
+            check = true;
+        }
         return check;
     }
 
@@ -56,6 +58,7 @@ class MainContent extends React.Component {
                         (listMessages[0].to !== this.props.listMessages[0].to)){
                         let payload = {};
                         payload.listMessages = listMessages;
+                        
                         this.props.actionSetListMessages(payload);
                     }                    
                 }else{

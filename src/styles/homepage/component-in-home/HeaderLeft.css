@@ -25,7 +25,7 @@
     border-bottom-right-radius: 7px;
     justify-content: flex-start;
     font-family: 'Nobile', sans-serif;
-    font-size: 13px;
+    font-size: 12px;
     color: white;
     text-align: center;
     background-color: #65b7fa;
@@ -45,6 +45,7 @@ button:active {
 .input-search{
     flex-grow: 1;
 }
+
 .input-search>input{
     height: 100%;
     width: 100%;

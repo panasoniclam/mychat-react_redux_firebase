@@ -20,15 +20,6 @@ class LoginPage extends Component {
             this.props.firebase.auth().onAuthStateChanged(
                 (user) => {
                     if (user) {
-                        const uid = user.uid;;
-                        var lastOnlineRef = this.props.firebase.database().ref('users/' + uid + '/lastOnline');
-                        var myConnectionsRef = this.props.firebase.database().ref('users/' + uid + '/connection');
-
-                        lastOnlineRef.set(Firebase.database.ServerValue.TIMESTAMP);
-                        myConnectionsRef.set(true);
-                        // myConnectionsRef.onDisconnect().set(false);
-                        // lastOnlineRef.onDisconnect().set(Firebase.database.ServerValue.TIMESTAMP);
-
                         this.goToPageHome();
                     }
                 }
@@ -38,7 +29,7 @@ class LoginPage extends Component {
 
     handleLogin = () => {
         this.props.firebase.login({ provider: 'google', type: 'popup' });
-        this.setStateLogin();
+        // this.setStateLogin();
     }
 
     componentDidMount(){

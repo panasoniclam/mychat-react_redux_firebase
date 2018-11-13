@@ -23,18 +23,54 @@ class Home extends Component{
         this.onResize = this.onResize.bind(this);
     }
 
+
+    setStateLogin = () => {
+        const auth = this.props.auth;
+        if(auth.isLoaded && !auth.isEmpty){
+            this.props.firebase.auth().onAuthStateChanged(
+                (user) => {
+                    if (user) {
+                        const uid = user.uid;;
+                        var lastOnlineRef = this.props.firebase.database().ref('users/' + uid + '/lastOnline');
+                        var myConnectionsRef = this.props.firebase.database().ref('users/' + uid + '/connection');
+                        var lastTimeMessage = this.props.firebase.database().ref('users/' + uid + '/lastTimeMessage');
+
+                        var connectedRef = this.props.firebase.database().ref('.info/connected');
+                        connectedRef.on('value', (snapshot) => {
+                            if(snapshot.val()){
+                                lastTimeMessage.set(0);
+                                myConnectionsRef.onDisconnect().set(false);
+                                lastOnlineRef.onDisconnect().set(Firebase.database.ServerValue.TIMESTAMP);
+
+                                lastOnlineRef.set(Firebase.database.ServerValue.TIMESTAMP);
+                                myConnectionsRef.set(true);
+
+                            }
+                        })
+
+                    }
+                }
+            );
+        } 
+    }
+
     onResize(){
         this.setState({
             height: window.innerHeight,
         })
     }
-
+    
     componentDidMount() {
         window.addEventListener('resize', this.onresize);
+        this.setStateLogin();
     }
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.onResize);
+    }
+
+    componentDidUpdate(){
+        this.setStateLogin();
     }
 
     render(){

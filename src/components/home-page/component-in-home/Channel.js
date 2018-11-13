@@ -34,7 +34,7 @@ class Channel extends React.Component{
 
         var lastMessage = this.props.firebase.database().ref('channels/' + channelId + '/lastMessage');
         
-        lastMessage.on('value', snapshot => {
+        lastMessage.on('value', (snapshot) => {
             if(this.state.lastMessage !== snapshot.val() && activeChannel.key === channel.key){
                 this.setState({
                     lastMessage: snapshot.val()

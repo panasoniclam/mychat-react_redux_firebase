@@ -11,6 +11,7 @@ class SiderbarLeft extends React.Component {
     type = "spokes";
     render() {
         var channels = [];
+        var channelsTmp = [];
         const loader =
         <div className="loader" key={0}>
             <ReactLoading type="spokes" color="black" height={25} width={25}/>
@@ -18,32 +19,18 @@ class SiderbarLeft extends React.Component {
 
         const auth = this.props.auth;
         if(auth.isLoaded && !auth.isEmpty){
-            var channelsTmp = this.props.users;
-            channels = lodash.sortBy(channelsTmp, value => value.lastOnline);
+            channelsTmp = this.props.users;
+            channelsTmp = lodash.sortBy(channelsTmp, (item) => -item.value.lastTimeMessage);
         }
-        
-        const idStarChannel = this.props.idStarChannel;
 
-        if(idStarChannel !== ''){
-            var channelTmp = '';
-            var indexChannel = '';
-
-            channels.forEach((channel, index) => {
-                if(channel.key === idStarChannel){
-                    if(channel.value.connection){
-                        indexChannel = index;
-                        channelTmp = channel;
-                        
-                    }
-                }
-            })
-
-            if(channelTmp !== ''){
-                channels.splice(indexChannel, 1);
-                channels.unshift(channelTmp);
+        for(var i = channelsTmp.length - 1; i >= 0; i--){
+            if(channelsTmp[i].value.isStar){
+                channels.unshift(channelsTmp[i]);
+            }else{
+                channels.push(channelsTmp[i]);
             }
         }
-
+        
         return (
             ((isLoaded(this.props.users) && !isEmpty(this.props.users)) ?
                 <div className="siderbar-left">
@@ -75,7 +62,6 @@ class SiderbarLeft extends React.Component {
 const mapStateToProps = (state) => ({
     auth: state.firebase.auth,
     users: state.firebase.ordered.users,
-    idStarChannel: state.channelReducer.idStarChannel
 })
 
 const mapDispatchToProps = (dispatch) => ({

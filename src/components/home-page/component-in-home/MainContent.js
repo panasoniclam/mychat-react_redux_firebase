@@ -41,6 +41,13 @@ class MainContent extends React.Component {
         return check;
     }
 
+    checkUploadImage = (url) => {
+        if(url.indexOf("https://firebasestorage.googleapis.com/v0/b/chatweb-8c888.appspot.com/o/image") !== -1){
+            return true;
+        }
+        return false;
+    } 
+
     render() {
         const activeChannel = this.props.activeChannel;
         const myId = this.props.auth.uid;
@@ -70,6 +77,7 @@ class MainContent extends React.Component {
         }
 
         return (
+            
             <div ref={(refe) => { this.refMessage = refe }} className="messages">
                 {this.props.listMessages.map((message, index) => {
                     var isMe = false;
@@ -84,7 +92,15 @@ class MainContent extends React.Component {
                                     {
                                         this.checkURLIsLinkImage(message.message) ? 
                                             <div className="message-image">
-                                                <img src={message.message} alt="avatar"></img>
+                                                {
+                                                    this.checkUploadImage(message.message) ?
+                                                    <img src={message.message} alt="avatar"></img>
+                                                    :
+                                                    <div>
+                                                        <div className='link-image'>{message.message}</div>
+                                                        <img src={message.message} alt="avatar"></img>
+                                                    </div>
+                                                }
                                             </div>
                                             :
                                             <div className="message-text-me">

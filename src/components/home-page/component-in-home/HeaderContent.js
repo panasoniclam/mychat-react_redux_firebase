@@ -9,38 +9,33 @@ import { compose } from 'redux';
 import { firebaseConnect} from 'react-redux-firebase';
 import { throws } from 'assert';
 class HeaderContent extends React.Component {
-
-    setIdStarChannel = () => {
-        var idStarChannel = this.props.firebase.database().ref('idchannelstar/' + this.props.auth.uid);
-        idStarChannel.on('value', snapshot => {
-            if(this.props.idStarChannel !== snapshot.val()){
-                if(snapshot.val() && snapshot.val() !== ''){ 
-                    var payload = {};
-                    payload.idStarChannel = snapshot.val();
-                    this.props.actionSetStarChannel(payload);
-                }else{
-                    var payload = {};
-                    idStarChannel.set('');
-                    payload.idStarChannel = '';
-                    this.props.actionSetStarChannel(payload);
-                }
-            }   
-        }) 
+    constructor(props){
+        super(props);
+        this.state = {
+            isStar: false,
+        }
     }
-
     handlerClickStar = () => {
-        var idStarChannel = this.props.firebase.database().ref('idchannelstar/' + this.props.auth.uid);
-        idStarChannel.set(this.props.activeChannel.key);
+        var idStarChannel = this.props.firebase.database().ref('users/' + this.props.activeChannel.key + '/isStar');
+        idStarChannel.set(true);
     }
 
     handlerClickSolidStar = () => {
-        var idStarChannel = this.props.firebase.database().ref('idchannelstar/' + this.props.auth.uid);
-        idStarChannel.set('');
+        var idStarChannel = this.props.firebase.database().ref('users/' + this.props.activeChannel.key + '/isStar');
+        idStarChannel.set(false);
     }
 
     render() {
         const activeChannel = this.props.activeChannel;
-        this.setIdStarChannel();
+        var idStarChannel = this.props.firebase.database().ref('users/' + this.props.activeChannel.key + '/isStar');
+
+        idStarChannel.on('value', (snapshot) => {
+            if(snapshot.val() !== this.state.isStar){
+                this.setState({
+                    isStar: snapshot.val()
+                })
+            }
+        })
 
         return (
             (activeChannel !== '' ? 
@@ -53,7 +48,7 @@ class HeaderContent extends React.Component {
                         <div>{activeChannel.value.displayName}</div>
                     </div>
                     {
-                        this.props.idStarChannel === activeChannel.key ? 
+                        this.state.isStar? 
                         <div className="star">
                             <img src={starFull} alt="star" onClick={this.handlerClickSolidStar}></img>
                         </div>
@@ -78,12 +73,10 @@ class HeaderContent extends React.Component {
 const mapStateToProps = (state) => ({
     activeChannel: state.channelReducer.activeChannel,
     auth: state.firebase.auth,
-    idStarChannel: state.channelReducer.idStarChannel
 })
 
 const mapDispatchToProps = (dispatch) => ({
     actionsSetActiveChannel: (payload) => dispatch(channelAction.actionsSetActiveChannel(payload)),
-    actionSetStarChannel: (payload) => dispatch(channelAction.actionSetStarChannel(payload))
 });
 
 

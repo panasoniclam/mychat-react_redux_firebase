@@ -2,7 +2,7 @@ import {channelConstant} from '../constants/channelConstant';
 
 const initalState = {
     activeChannel: '',
-    idStarChannel: ''
+    idStarChannels: []
 }
 
 export default function manageUsersReducer(state=initalState, actions){
@@ -11,11 +11,6 @@ export default function manageUsersReducer(state=initalState, actions){
             return{
                 ...state,
                 activeChannel: actions.payload.activeChannel,
-            };
-        case channelConstant.SET_STAR_CHANNEL:
-            return{
-                ...state,
-                idStarChannel: actions.payload.idStarChannel
             };
         default:
             return state;

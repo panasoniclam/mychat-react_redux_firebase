@@ -7,7 +7,7 @@ import { compose } from 'redux';
 import { firebaseConnect} from 'react-redux-firebase';
 import {channelAction} from '../../../actions/channelAction.js';
 import {messageAction} from '../../../actions/messageAction.js';
-
+import Firebase from 'firebase';
 class MessageInput extends React.Component {
     handleChange = (event) => {
         let payload = {};
@@ -32,6 +32,7 @@ class MessageInput extends React.Component {
             const channelId = (myId < userChatId) ? myId + userChatId : userChatId + myId;
             var messages = this.props.firebase.database().ref('channels/' + channelId + '/messages');
             var lastMessage = this.props.firebase.database().ref('channels/' + channelId + '/lastMessage');
+            var lastTimeMessage = this.props.firebase.database().ref('users/' + userChatId + '/lastTimeMessage');
 
             messages.push({
                 from: myId,
@@ -41,6 +42,8 @@ class MessageInput extends React.Component {
             })
 
             lastMessage.set(newMessage);
+            lastTimeMessage.set(Firebase.database.ServerValue.TIMESTAMP);
+            console.log(1);
 
             let payload = {};
             payload.message = '';

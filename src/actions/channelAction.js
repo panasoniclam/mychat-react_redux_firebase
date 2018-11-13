@@ -7,14 +7,6 @@ const actionsSetActiveChannel = (payload) => ({
     }
 });
 
-const actionSetStarChannel = (payload) => ({
-    type: channelConstant.SET_STAR_CHANNEL,
-    payload: {
-        idStarChannel: payload.idStarChannel
-    }    
-})
-
 export const channelAction = {
     actionsSetActiveChannel,
-    actionSetStarChannel
 }
